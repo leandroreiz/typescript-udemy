@@ -8,3 +8,8 @@ userInput = 5;
 if (typeof userInput === 'string') {
     userName = userInput;
 }
+// Type never
+function generateError(message, code) {
+    throw { message: message, code: code };
+}
+generateError('An error occurred!', 500);
