@@ -1,5 +1,6 @@
-var userInput;
-var userName;
+"use strict";
+let userInput;
+let userName;
 userInput = 'Leandro';
 userInput = 5;
 // Type 'unknown' is not assignable to type 'string'
@@ -10,6 +11,6 @@ if (typeof userInput === 'string') {
 }
 // Type never
 function generateError(message, code) {
-    throw { message: message, code: code };
+    throw { message, code };
 }
 generateError('An error occurred!', 500);
