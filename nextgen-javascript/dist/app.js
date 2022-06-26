@@ -22,4 +22,11 @@ const [hobby1, hobby2, ...remainingHobbies] = activeHobbies;
 console.log(hobby1, hobby2, ...remainingHobbies);
 const { firstName: userName, age } = person;
 console.log(userName, age);
+class Department {
+    constructor(n) {
+        this.name = n;
+    }
+}
+const accounting = new Department('Accounting');
+console.log(accounting);
 //# sourceMappingURL=app.js.map
