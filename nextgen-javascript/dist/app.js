@@ -22,11 +22,27 @@ const [hobby1, hobby2, ...remainingHobbies] = activeHobbies;
 console.log(hobby1, hobby2, ...remainingHobbies);
 const { firstName: userName, age } = person;
 console.log(userName, age);
+console.log('---- CLASSES ----');
 class Department {
     constructor(n) {
+        this.employees = [];
         this.name = n;
+    }
+    describe() {
+        console.log('Department: ' + this.name);
+    }
+    addEmployee(employee) {
+        this.employees.push(employee);
+    }
+    printEmployeeInformation() {
+        console.log(`Number of employees: ${this.employees.length}`);
+        console.log(this.employees);
     }
 }
 const accounting = new Department('Accounting');
-console.log(accounting);
+accounting.addEmployee('Leandro');
+accounting.addEmployee('Chelem');
+accounting.addEmployee('Nina');
+accounting.describe();
+accounting.printEmployeeInformation();
 //# sourceMappingURL=app.js.map
