@@ -37,22 +37,20 @@ const { firstName: userName, age } = person;
 console.log(userName, age);
 
 // Classes
+
 console.log('---- CLASSES ----');
 
 class Department {
-  // private id: string;
-  // private name: string;
   private employees: string[] = [];
 
-  constructor(private id: string, public name: string) {
-    // this.name = name;
-  }
+  constructor(private readonly id: string, public name: string) {}
 
   describe(this: Department) {
     console.log(`Department (${this.id}): ${this.name}`);
   }
 
   addEmployee(employee: string) {
+    // this.id = 'd2'; can't assign readonly props
     this.employees.push(employee);
   }
 
@@ -67,13 +65,6 @@ const accounting = new Department('d1', 'Accounting');
 accounting.addEmployee('Leandro');
 accounting.addEmployee('Chelem');
 accounting.addEmployee('Nina');
-// accounting.employees[3] = 'John Doe'; // Property 'employees' is private
 
 accounting.describe();
 accounting.printEmployeeInformation();
-
-// const accountingCopy = {
-//   name: 'Human Resources',
-//   describe: accounting.describe,
-// };
-// accountingCopy.describe();
