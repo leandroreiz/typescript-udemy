@@ -24,12 +24,13 @@ const { firstName: userName, age } = person;
 console.log(userName, age);
 console.log('---- CLASSES ----');
 class Department {
-    constructor(n) {
+    constructor(id, name) {
+        this.id = id;
+        this.name = name;
         this.employees = [];
-        this.name = n;
     }
     describe() {
-        console.log('Department: ' + this.name);
+        console.log(`Department (${this.id}): ${this.name}`);
     }
     addEmployee(employee) {
         this.employees.push(employee);
@@ -39,7 +40,7 @@ class Department {
         console.log(this.employees);
     }
 }
-const accounting = new Department('Accounting');
+const accounting = new Department('d1', 'Accounting');
 accounting.addEmployee('Leandro');
 accounting.addEmployee('Chelem');
 accounting.addEmployee('Nina');
