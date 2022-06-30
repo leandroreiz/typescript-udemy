@@ -42,14 +42,19 @@ console.log(userName, age);
 
 console.log('---- CLASSES ----');
 
-class Department {
+abstract class Department {
+  static fiscalYear = 2022;
   protected employees: string[] = [];
 
-  constructor(private readonly id: string, public name: string) {}
+  constructor(protected readonly id: string, public name: string) {}
 
-  describe(this: Department) {
-    console.log(`Department (${this.id}): ${this.name}`);
+  static createEmployee(name: string) {
+    return {
+      name,
+    };
   }
+
+  abstract describe(this: Department): void;
 
   addEmployee(employee: string) {
     // this.id = 'd2'; can't assign readonly props
@@ -62,14 +67,22 @@ class Department {
   }
 }
 
+const employee1 = Department.createEmployee('Wallace');
+console.log(employee1, Department.fiscalYear);
+
 class ITDepartment extends Department {
   constructor(id: string, public admins: string[]) {
     super(id, 'IT');
+  }
+
+  describe() {
+    console.log(`IT Department - ID: ${this.id}`);
   }
 }
 
 class AccountingDepartment extends Department {
   private lastReport: string;
+  private static instance: AccountingDepartment;
 
   get mostRecentReport() {
     if (this.lastReport) return this.lastReport;
@@ -81,9 +94,22 @@ class AccountingDepartment extends Department {
     this.addReport(report);
   }
 
-  constructor(id: string, private reports: string[]) {
+  private constructor(id: string, private reports: string[]) {
     super(id, 'Accounting');
     this.lastReport = reports[0];
+  }
+
+  static getInstance() {
+    if (this.instance) {
+      return this.instance;
+    }
+
+    this.instance = new AccountingDepartment('d2', []);
+    return this.instance;
+  }
+
+  describe() {
+    console.log(`Accounting Department - ID: ${this.id}`);
   }
 
   addEmployee(employee: string): void {
@@ -104,7 +130,8 @@ class AccountingDepartment extends Department {
 }
 
 const it = new ITDepartment('d1', ['Leandro']);
-const accounting = new AccountingDepartment('d2', []);
+// const accounting = new AccountingDepartment('d2', []);
+const accounting = AccountingDepartment.getInstance();
 
 console.log(it);
 
@@ -118,5 +145,5 @@ accounting.addReport('Report added');
 accounting.mostRecentReport = 'Report set';
 console.log(accounting.mostRecentReport);
 
-accounting.describe();
 accounting.printReports();
+accounting.describe();

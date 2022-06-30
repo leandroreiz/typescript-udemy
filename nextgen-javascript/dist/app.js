@@ -29,8 +29,10 @@ class Department {
         this.name = name;
         this.employees = [];
     }
-    describe() {
-        console.log(`Department (${this.id}): ${this.name}`);
+    static createEmployee(name) {
+        return {
+            name,
+        };
     }
     addEmployee(employee) {
         this.employees.push(employee);
@@ -40,10 +42,16 @@ class Department {
         console.log(this.employees);
     }
 }
+Department.fiscalYear = 2022;
+const employee1 = Department.createEmployee('Wallace');
+console.log(employee1, Department.fiscalYear);
 class ITDepartment extends Department {
     constructor(id, admins) {
         super(id, 'IT');
         this.admins = admins;
+    }
+    describe() {
+        console.log(`IT Department - ID: ${this.id}`);
     }
 }
 class AccountingDepartment extends Department {
@@ -62,6 +70,16 @@ class AccountingDepartment extends Department {
             throw new Error('Please pass in a valid value!');
         this.addReport(report);
     }
+    static getInstance() {
+        if (this.instance) {
+            return this.instance;
+        }
+        this.instance = new AccountingDepartment('d2', []);
+        return this.instance;
+    }
+    describe() {
+        console.log(`Accounting Department - ID: ${this.id}`);
+    }
     addEmployee(employee) {
         if (employee === 'Leandro') {
             return;
@@ -77,7 +95,7 @@ class AccountingDepartment extends Department {
     }
 }
 const it = new ITDepartment('d1', ['Leandro']);
-const accounting = new AccountingDepartment('d2', []);
+const accounting = AccountingDepartment.getInstance();
 console.log(it);
 it.addEmployee('Nina');
 it.describe();
@@ -87,6 +105,6 @@ accounting.addEmployee('Leandro');
 accounting.addReport('Report added');
 accounting.mostRecentReport = 'Report set';
 console.log(accounting.mostRecentReport);
-accounting.describe();
 accounting.printReports();
+accounting.describe();
 //# sourceMappingURL=app.js.map
