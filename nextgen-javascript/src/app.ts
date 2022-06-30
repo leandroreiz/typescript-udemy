@@ -36,12 +36,14 @@ console.log(hobby1, hobby2, ...remainingHobbies);
 const { firstName: userName, age } = person;
 console.log(userName, age);
 
+// -----------------------------------------------------------
 // Classes
+// -----------------------------------------------------------
 
 console.log('---- CLASSES ----');
 
 class Department {
-  private employees: string[] = [];
+  protected employees: string[] = [];
 
   constructor(private readonly id: string, public name: string) {}
 
@@ -67,31 +69,54 @@ class ITDepartment extends Department {
 }
 
 class AccountingDepartment extends Department {
+  private lastReport: string;
+
+  get mostRecentReport() {
+    if (this.lastReport) return this.lastReport;
+    throw new Error('No report found!');
+  }
+
+  set mostRecentReport(report: string) {
+    if (!report) throw new Error('Please pass in a valid value!');
+    this.addReport(report);
+  }
+
   constructor(id: string, private reports: string[]) {
     super(id, 'Accounting');
+    this.lastReport = reports[0];
+  }
+
+  addEmployee(employee: string): void {
+    if (employee === 'Leandro') {
+      return;
+    }
+    this.employees.push(employee);
   }
 
   addReport(text: string) {
     this.reports.push(text);
+    this.lastReport = text;
   }
 
   printReports() {
-    console.log(this.reports);
+    console.log(this.reports, this.employees);
   }
 }
 
 const it = new ITDepartment('d1', ['Leandro']);
-const accounting = new AccountingDepartment('d2', ['Report 1', 'Report 2']);
-
-it.addEmployee('Nina');
-accounting.addEmployee('Chelem');
-
-it.describe();
-accounting.describe();
-accounting.addReport('Report 3 added');
-
-it.printEmployeeInformation();
-accounting.printReports();
+const accounting = new AccountingDepartment('d2', []);
 
 console.log(it);
-console.log(accounting);
+
+it.addEmployee('Nina');
+it.describe();
+it.printEmployeeInformation();
+
+accounting.addEmployee('Chelem');
+accounting.addEmployee('Leandro');
+accounting.addReport('Report added');
+accounting.mostRecentReport = 'Report set';
+console.log(accounting.mostRecentReport);
+
+accounting.describe();
+accounting.printReports();

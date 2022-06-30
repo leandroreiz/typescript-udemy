@@ -50,23 +50,43 @@ class AccountingDepartment extends Department {
     constructor(id, reports) {
         super(id, 'Accounting');
         this.reports = reports;
+        this.lastReport = reports[0];
+    }
+    get mostRecentReport() {
+        if (this.lastReport)
+            return this.lastReport;
+        throw new Error('No report found!');
+    }
+    set mostRecentReport(report) {
+        if (!report)
+            throw new Error('Please pass in a valid value!');
+        this.addReport(report);
+    }
+    addEmployee(employee) {
+        if (employee === 'Leandro') {
+            return;
+        }
+        this.employees.push(employee);
     }
     addReport(text) {
         this.reports.push(text);
+        this.lastReport = text;
     }
     printReports() {
-        console.log(this.reports);
+        console.log(this.reports, this.employees);
     }
 }
 const it = new ITDepartment('d1', ['Leandro']);
-const accounting = new AccountingDepartment('d2', ['Report 1', 'Report 2']);
-it.addEmployee('Nina');
-accounting.addEmployee('Chelem');
-it.describe();
-accounting.describe();
-accounting.addReport('Report 3 added');
-it.printEmployeeInformation();
-accounting.printReports();
+const accounting = new AccountingDepartment('d2', []);
 console.log(it);
-console.log(accounting);
+it.addEmployee('Nina');
+it.describe();
+it.printEmployeeInformation();
+accounting.addEmployee('Chelem');
+accounting.addEmployee('Leandro');
+accounting.addReport('Report added');
+accounting.mostRecentReport = 'Report set';
+console.log(accounting.mostRecentReport);
+accounting.describe();
+accounting.printReports();
 //# sourceMappingURL=app.js.map
