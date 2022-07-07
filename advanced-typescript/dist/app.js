@@ -1,25 +1,24 @@
 "use strict";
-let add;
-add = (n1, n2) => {
-    return n1 + n2;
-};
-class Person {
-    constructor(n) {
-        this.age = 38;
-        if (n)
-            this.name = n;
-    }
-    greet(phrase) {
-        if (this.name) {
-            console.log(`${phrase} ${this.name}!`);
-        }
-        else {
-            console.log('Hi!');
-        }
-    }
+function merge(objA, objB) {
+    return Object.assign(objA, objB);
 }
-let user1;
-user1 = new Person();
-user1.greet('Hi there! My name is');
-console.log(user1);
+const mergeObj = merge({ name: 'Leandro', hobbies: ['guitar', 'games'] }, { age: 38 });
+console.log(mergeObj);
+console.log(mergeObj.name);
+function countAndDescribe(element) {
+    let descriptionText = 'Got no value.';
+    if (element.length === 1) {
+        descriptionText = 'Got ' + element.length + ' element.';
+    }
+    else if (element.length > 1) {
+        descriptionText = 'Got ' + element.length + ' elements.';
+    }
+    return [element, descriptionText];
+}
+console.log(countAndDescribe(['guitar', 'playing']));
+console.log(countAndDescribe('Hi there!'));
+function extractAndConvert(obj, key) {
+    return 'Value: ' + obj[key];
+}
+extractAndConvert({ name: 'Leandro' }, 'name');
 //# sourceMappingURL=app.js.map
