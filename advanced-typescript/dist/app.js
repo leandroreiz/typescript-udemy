@@ -41,8 +41,6 @@ PersonDecorators = __decorate([
     Logger('Logging in'),
     WithTemplate('<h2>My Person Object</h2>', 'app')
 ], PersonDecorators);
-const pers = new PersonDecorators();
-console.log(pers);
 function Log(target, propName) {
     console.log('Property decorator!');
     console.log(target, propName);
@@ -92,4 +90,91 @@ __decorate([
 ], Product.prototype, "getPriceWithTax", null);
 const p1 = new Product('Fender Stratocaster FF', 790.9);
 const p2 = new Product('Ibanez Prestige', 2100.0);
+function Autobind(_, _2, descriptor) {
+    const originalMethod = descriptor.value;
+    const objDescriptor = {
+        configurable: true,
+        enumerable: false,
+        get() {
+            const boundFn = originalMethod.bind(this);
+            return boundFn;
+        },
+    };
+    return objDescriptor;
+}
+class Printer {
+    constructor() {
+        this.message = 'This works!';
+    }
+    showMessage() {
+        console.log(this.message);
+    }
+}
+__decorate([
+    Autobind
+], Printer.prototype, "showMessage", null);
+const printer = new Printer();
+const button = document.querySelector('button');
+button === null || button === void 0 ? void 0 : button.addEventListener('click', printer.showMessage);
+const registeredValidators = {};
+function Required(target, propName) {
+    var _a, _b;
+    registeredValidators[target.constructor.name] = Object.assign(Object.assign({}, registeredValidators[target.constructor.name]), { [propName]: [
+            ...((_b = (_a = registeredValidators[target.constructor.name]) === null || _a === void 0 ? void 0 : _a[propName]) !== null && _b !== void 0 ? _b : []),
+            'required',
+        ] });
+}
+function PositiveNumber(target, propName) {
+    var _a, _b;
+    registeredValidators[target.constructor.name] = Object.assign(Object.assign({}, registeredValidators[target.constructor.name]), { [propName]: [
+            ...((_b = (_a = registeredValidators[target.constructor.name]) === null || _a === void 0 ? void 0 : _a[propName]) !== null && _b !== void 0 ? _b : []),
+            'positive',
+        ] });
+}
+function validate(obj) {
+    const objValidatorConfig = registeredValidators[obj.constructor.name];
+    if (!objValidatorConfig) {
+        return true;
+    }
+    let isValid = true;
+    for (const prop in objValidatorConfig) {
+        for (const validator of objValidatorConfig[prop]) {
+            switch (validator) {
+                case 'required':
+                    isValid = isValid && !!obj[prop];
+                    break;
+                case 'positive':
+                    isValid = isValid && obj[prop] > 0;
+                    break;
+            }
+        }
+    }
+    return isValid;
+}
+class Course {
+    constructor(t, p) {
+        this.title = t;
+        this.price = p;
+    }
+}
+__decorate([
+    Required
+], Course.prototype, "title", void 0);
+__decorate([
+    PositiveNumber
+], Course.prototype, "price", void 0);
+const form = document.querySelector('form');
+form === null || form === void 0 ? void 0 : form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const titleEl = document.getElementById('title');
+    const priceEl = document.getElementById('price');
+    const title = titleEl.value;
+    const price = +priceEl.value;
+    const createdCourse = new Course(title, price);
+    if (!validate(createdCourse)) {
+        alert('Invalid input, please try again!');
+        return;
+    }
+    console.log(createdCourse);
+});
 //# sourceMappingURL=app.js.map
